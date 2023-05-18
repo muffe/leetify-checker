@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Electron App</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  </head>
+  <body>
+    <a href="#" onclick="document.getElementById('tableBody').replaceChildren();">Clear table</a><br/>
+    <img style="width: 25px; height: auto; display:none;" src="https://media3.giphy.com/media/3o7bu3XilJ5BOiSGic/200w.webp?cid=ecf05e47tw761q0i2c1inzjrswgvme6xc21yl22d63eymw14&ep=v1_gifs_search&rid=200w.webp&ct=g" class="loadingSpinner"  />
+    <span class="loadingText"></span>
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Current Rank</th>
+          <th>Max Rank</th>
+          <th>Bans</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Data will be dynamically populated here -->
+      </tbody>
+    </table>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
