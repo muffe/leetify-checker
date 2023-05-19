@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const clipboardListener = require('clipboard-event');
 const { clipboard } = require('electron')
 const SteamID = require('steamid');
+const loadedPlayers = {};
 
 
 clipboardListener.startListening();
@@ -12,15 +13,13 @@ clipboardListener.on('change', async () => {
 
     const regex = /(STEAM_.+?)\s/gm;
     const matches = [...text.matchAll(regex)];
-
-    console.log(matches);
     let loaded = 0;
 
     for (const matchData of matches) {
       document.querySelector(".loadingText").innerText = "Loaded " + loaded + " of " + matches.length + " hits";
       const steamID = matchData[1];
       const convertedSteamId = new SteamID(steamID).getSteamID64();
-      console.log(steamID, convertedSteamId);
+
       await loadSteamIdData(convertedSteamId);
       loaded++;
     }
@@ -42,23 +41,29 @@ async function loadSteamIdData (steamID) {
     const name = nameElement ? nameElement.innerText : '';
 
     const scoreElements = document.querySelectorAll('.rank-and-name > app-rank-icon');
-    const currentRank = Array.from(scoreElements).map(element => element.querySelector('img')).map(element => element.alt);
+    const currentRank = Array.from(scoreElements).map(element => element.querySelector('img')).map(element => " " + element.alt);
 
     const maxRank = document.querySelectorAll('.nax-ranks-achieved > app-rank-icon');
-    const maxRanks = Array.from(maxRank).map(element => element.querySelector('img')).map(element => element.alt);
+    const maxRanks = Array.from(maxRank).map(element => element.querySelector('img')).map(element => " " + element.alt);
+
+    const winrate = document.querySelector('#stats-overview .win-rate .score-text').textContent.trim();
 
     const banList = document.querySelectorAll(".profiles .ban-badge")
-    const bans = Array.from(banList).map(element => element.getAttribute("ngbtooltip"));
+    const bans = Array.from(banList).map(element => " " + element.getAttribute("ngbtooltip"));
+
+    const bannedFriends = document.querySelectorAll('#teammates .ban-badge').length > 0;
 
     return {
       name,
       currentRank,
       maxRanks,
-      bans
+      bans,
+      winrate,
+      bannedFriends
     };
   });
 
-  console.log(data);
+  loadedPlayers[steamID] = data;
 
   await browser.close();
 
@@ -76,24 +81,30 @@ async function loadSteamIdData (steamID) {
   const maxRankColumn = document.createElement('td');
   const banColumn = document.createElement('td');
   const urlColumn = document.createElement('td');
+  const winrateColumn = document.createElement('td');
+  const bannedFriendsColumn = document.createElement('td');
 
   nameColumn.textContent = data.name;
   currentRankColumn.textContent = data.currentRank;
   maxRankColumn.textContent = data.maxRanks;
   banColumn.textContent = data.bans;
   urlColumn.innerHTML = `<a target="_blank" href="${url}">${data.name}</a>`;
+  winrateColumn.textContent = data.winrate;
+  bannedFriendsColumn.textContent = data.bannedFriends ? 'Yes' : 'No';
 
   row.appendChild(nameColumn);
   row.appendChild(currentRankColumn);
   row.appendChild(maxRankColumn);
+  row.appendChild(winrateColumn);
   row.appendChild(banColumn);
+  row.appendChild(bannedFriendsColumn);
   row.appendChild(urlColumn);
   tableBody.appendChild(row);
 };
 
 
 const waitTillHTMLRendered = async (page, timeout = 30000) => {
-    const checkDurationMsecs = 250;
+    const checkDurationMsecs = 1000;
     const maxChecks = timeout / checkDurationMsecs;
     let lastHTMLSize = 0;
     let checkCounts = 1;
@@ -128,17 +139,23 @@ function setEmptyTableData(steamID, tableBody) {
   const maxRankColumn = document.createElement('td');
   const banColumn = document.createElement('td');
   const urlColumn = document.createElement('td');
+  const winrateColumn = document.createElement('td');
+  const bannedFriendsColumn = document.createElement('td');
 
   nameColumn.textContent = steamID;
   currentRankColumn.textContent = "-";
   maxRankColumn.textContent = "-";
   banColumn.textContent = "-";
   urlColumn.innerHTML = "";
+  winrateColumn.innerText = '-';
+  bannedFriendsColumn.innerText = '-';
 
   row.appendChild(nameColumn);
   row.appendChild(currentRankColumn);
   row.appendChild(maxRankColumn);
+  row.appendChild(winrateColumn);
   row.appendChild(banColumn);
+  row.appendChild(bannedFriendsColumn);
   row.appendChild(urlColumn);
   tableBody.appendChild(row);
 }
