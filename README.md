@@ -3,6 +3,8 @@
 Leetify Checker is an Electron application written in JavaScript that allows you to scan Leetify profiles for various statistics. It provides information such as current and highest ranks, bans, and more. With Leetify Checker, you can easily retrieve the data you need by typing "status" in the CSGO console and copying the block containing the Steam IDs of all players on the server.
 The tool will scan your clipboard and extract found Steam IDs.
 
+![Preview screenshot](https://i.imgur.com/mCt0J7c.png)
+
 ## Features
 
 - Scan Leetify profiles for various statistics
