@@ -12,7 +12,11 @@ The tool will scan your clipboard and extract found Steam IDs.
 - Check for bans and other information
 - Easy-to-use
 
-## Installation
+## Download
+Download the latest release from https://github.com/muffe/leetify-checker/releases   
+The installer is named leetify-checker-x.x.x.Setup.exe
+
+## Development
 
 To get started with Leetify Checker, follow these steps:
 
@@ -31,9 +35,9 @@ To get started with Leetify Checker, follow these steps:
    npm install
    ```
 
-## Usage
+### Usage
 
-### Starting the Application (Debug Mode)
+#### Starting the Application (Debug Mode)
 
 To start the Leetify Checker application in debug mode, run the following command:
 
@@ -43,7 +47,7 @@ npm start
 
 This will launch the application and provide you with a debugging environment.
 
-### Building an Archive
+#### Building an Archive
 
 To build an archive for the current system architecture, use the following command:
 
