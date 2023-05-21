@@ -46,7 +46,8 @@ async function loadSteamIdData (steamID) {
     const maxRank = document.querySelectorAll('.nax-ranks-achieved > app-rank-icon');
     const maxRanks = Array.from(maxRank).map(element => element.querySelector('img')).map(element => " " + element.alt);
 
-    const winrate = document.querySelector('#stats-overview .win-rate .score-text').textContent.trim();
+    const win = document.querySelector('#stats-overview .win-rate .score-text');
+    const winrate = win ? win.textContent.trim() : '';
 
     const banList = document.querySelectorAll(".profiles .ban-badge")
     const bans = Array.from(banList).map(element => " " + element.getAttribute("ngbtooltip"));
